@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ form_title }} | Employee Task Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <h1 class="h4 fw-bold mb-4">{{ form_title }}</h1>
+                <form method="POST" novalidate>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Task Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required minlength="3"
+                               value="{{ request.form.title if request.method == 'POST' else (task.title if task else '') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required minlength="5">{{ request.form.description if request.method == 'POST' else (task.description if task else '') }}</textarea>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="status" class="form-label">Status</label>
+                            {% set current_status = request.form.status if request.method == 'POST' else (task.status if task else 'Pending') %}
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="Pending" {% if current_status == "Pending" %}selected{% endif %}>Pending</option>
+                                <option value="In Progress" {% if current_status == "In Progress" %}selected{% endif %}>In Progress</option>
+                                <option value="Completed" {% if current_status == "Completed" %}selected{% endif %}>Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">{{ form_title }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
